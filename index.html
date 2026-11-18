@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apple Store Andijan | Original Apple Mahsulotlari Andijonda</title>
+    <meta name="description" content="Andijon shahar markazidagi rasmiy Apple Store do'koni. iPhone 13 dan iPhone 17 Pro Max gacha bo'lgan original Apple qurilmalari, kafolat va qulay yetkazib berish.">
+    <meta property="og:title" content="Apple Store Andijan">
+    <meta property="og:description" content="Original Apple mahsulotlari. Ishonchli sifat. Andijonda qulay xarid.">
+    <meta property="og:type" content="website">
+    
+    <!-- Google Fonts & FontAwesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="responsive.css">
+</head>
+<body>
+
+    <!-- Notification Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Sticky Navigation Bar -->
+    <header class="navbar-header" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo" id="logo-link">
+                <i class="fa-brands fa-apple"></i>
+                <span>Andijan Store</span>
+            </a>
+            
+            <nav class="nav-menu" id="nav-menu">
+                <a href="#bosh-sahifa" class="nav-link active">Bosh sahifa</a>
+                <a href="#catalog" class="nav-link">iPhone</a>
+                <a href="#catalog" class="nav-link" data-filter-cat="MacBook">MacBook</a>
+                <a href="#catalog" class="nav-link" data-filter-cat="iPad">iPad</a>
+                <a href="#catalog" class="nav-link" data-filter-cat="Watch">Watch</a>
+                <a href="#catalog" class="nav-link" data-filter-cat="AirPods">AirPods</a>
+                <a href="#about" class="nav-link">Biz haqimizda</a>
+                <a href="#location" class="nav-link">Aloqa & Manzil</a>
+            </nav>
+
+            <div class="nav-actions">
+                <button class="nav-icon-btn" id="search-toggle-btn" aria-label="Qidirish">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+                <button class="nav-icon-btn cart-btn" id="cart-toggle-btn" aria-label="Savatcha">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    <span class="cart-badge" id="cart-counter">0</span>
+                </button>
+                <button class="nav-auth-btn" id="auth-modal-btn">
+                    <i class="fa-regular fa-user"></i>
+                    <span id="auth-btn-text">Kirish</span>
+                </button>
+                <button class="hamburger" id="hamburger-btn" aria-label="Menyu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Search Overlay -->
+    <div class="search-overlay" id="search-overlay">
+        <div class="search-overlay-content">
+            <button class="search-close-btn" id="search-close-btn"><i class="fa-solid fa-xmark"></i></button>
+            <h2>Nimani qidiryapsiz?</h2>
+            <div class="search-input-wrapper">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="global-search-input" placeholder="Masalan: iPhone 16 Pro Max, 256GB, Qora...">
+            </div>
+            <div class="search-suggestions" id="search-suggestions">
+                <!-- Dynamic search suggestions -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Drawer -->
+    <div class="cart-drawer-backdrop" id="cart-backdrop"></div>
+    <div class="cart-drawer" id="cart-drawer">
+        <div class="cart-header">
+            <h3>Savatchangiz</h3>
+            <button class="cart-close-btn" id="cart-close-btn"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="cart-body" id="cart-items-container">
+            <!-- Cart items populated via JS -->
+        </div>
+        <div class="cart-footer" id="cart-footer">
+            <div class="cart-summary-row">
+                <span>Jami:</span>
+                <span id="cart-subtotal" class="cart-total-price">0 so'm</span>
+            </div>
+            <p class="cart-tax-note">Andijon shahar bo'ylab yetkazib berish bepul.</p>
+            <button class="btn-primary checkout-btn" id="proceed-checkout-btn">Buyurtma berishga o'tish</button>
+        </div>
+    </div>
+
+    <!-- Auth Modal (Login / Register) -->
+    <div class="modal-backdrop" id="auth-modal">
+        <div class="modal-card">
+            <button class="modal-close-btn" id="auth-close-btn"><i class="fa-solid fa-xmark"></i></button>
+            
+            <div class="auth-tabs">
+                <button class="auth-tab-btn active" data-tab="login">Kirish</button>
+                <button class="auth-tab-btn" data-tab="register">Ro'yxatdan o'tish</button>
+            </div>
+
+            <!-- Login Form -->
+            <form class="auth-form active" id="login-form">
+                <div class="form-group">
+                    <label>Telefon raqam yoki E-pochta</label>
+                    <input type="text" id="login-identifier" required placeholder="+998 90 123 45 67">
+                </div>
+                <div class="form-group">
+                    <label>Parol</label>
+                    <div class="password-wrap">
+                        <input type="password" id="login-password" required placeholder="••••••••">
+                        <button type="button" class="toggle-pwd"><i class="fa-regular fa-eye"></i></button>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary full-width">Kirish</button>
+            </form>
+
+            <!-- Register Form -->
+            <form class="auth-form" id="register-form">
+                <div class="form-group">
+                    <label>F.I.Sh.</label>
+                    <input type="text" id="reg-fullname" required placeholder="Anvar Aliyev">
+                </div>
+                <div class="form-group">
+                    <label>Telefon raqam</label>
+                    <input type="tel" id="reg-phone" required placeholder="+998 90 123 45 67">
+                </div>
+                <div class="form-group">
+                    <label>E-pochta</label>
+                    <input type="email" id="reg-email" required placeholder="example@gmail.com">
+                </div>
+                <div class="form-group">
+                    <label>Parol</label>
+                    <div class="password-wrap">
+                        <input type="password" id="reg-password" required placeholder="••••••••">
+                        <button type="button" class="toggle-pwd"><i class="fa-regular fa-eye"></i></button>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary full-width">Ro'yxatdan o'tish</button>
+            </form>
+            <p class="auth-disclaimer">Ma'lumotlar faqat demo maqsadida localStorage'da saqlanadi.</p>
+        </div>
+    </div>
+
+    <!-- Product Details Modal / Quick View -->
+    <div class="modal-backdrop" id="product-modal">
+        <div class="modal-card product-detail-card" id="product-detail-content">
+            <!-- Populated dynamically via JS -->
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div class="modal-backdrop" id="checkout-modal">
+        <div class="modal-card checkout-card">
+            <button class="modal-close-btn" id="checkout-close-btn"><i class="fa-solid fa-xmark"></i></button>
+            <h2>Buyurtmani Rasmiylashtirish</h2>
+            <form id="checkout-form">
+                <div class="checkout-grid">
+                    <div class="checkout-fields">
+                        <div class="form-group">
+                            <label>F.I.Sh. (Ism Familiya)</label>
+                            <input type="text" id="chk-name" required placeholder="Anvar Aliyev">
+                        </div>
+                        <div class="form-group">
+                            <label>Bog'lanish uchun telefon</label>
+                            <input type="tel" id="chk-phone" required placeholder="+998 90 123 45 67">
+                        </div>
+                        <div class="form-group">
+                            <label>Yetkazib berish manzili (Andijon shahar / viloyat)</label>
+                            <input type="text" id="chk-address" required placeholder="Boburshoh ko'chasi, 15-uy">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Yetkazib berish usuli</label>
+                                <select id="chk-delivery">
+                                    <option value="express">Andijon shahar bo'ylab tezkor (1-2 soat) - Bepul</option>
+                                    <option value="pickup">Do'kondan olib ketish (Markaziy filial)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>To'lov turi</label>
+                                <select id="chk-payment">
+                                    <option value="cash">Naqd pul yoki karta (Olib kelganda)</option>
+                                    <option value="click_payme">Click / Payme / Uzum (Onlayn)</option>
+                                    <option value="installment">Nashadli to'lov (Muddatli to'lov)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Qo'shimcha izoh</label>
+                            <textarea id="chk-notes" placeholder="Qavat, uy raqami yoki boshqa istaklar..."></textarea>
+                        </div>
+                    </div>
+                    <div class="checkout-summary-box">
+                        <h3>Buyurtma tafsilotlari</h3>
+                        <div id="chk-items-summary" class="chk-items-summary">
+                            <!-- Items preview -->
+                        </div>
+                        <div class="chk-total-row">
+                            <span>Jami to'lov:</span>
+                            <span id="chk-grand-total">0 so'm</span>
+                        </div>
+                        <button type="submit" class="btn-primary full-width">Buyurtmani Tasdiqlash</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-section" id="bosh-sahifa">
+        <div class="hero-content">
+            <span class="hero-badge">Yangi Kolleksiya 2026</span>
+            <h1 class="hero-title">Kelajak texnologiyasi — bugun siz bilan.</h1>
+            <p class="hero-subtitle">Original Apple mahsulotlari. Ishonchli sifat. Andijonda qulay xarid.</p>
+            <div class="hero-buttons">
+                <a href="#catalog" class="btn-primary">Xarid qilish <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="#about" class="btn-secondary">Modellarni ko'rish</a>
+            </div>
+        </div>
+        <div class="hero-image-wrap">
+            <img src="https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-16-pro-finish-select-202409-6-3inch-naturaltitanium?wid=5120&hei=2880&fmt=p-jpg&qlt=80&.v=1723186419515" alt="iPhone 16 Pro Natural Titanium" class="hero-main-img" id="hero-dynamic-img">
+        </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section class="features-section">
+        <div class="container">
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <h3>100% Original</h3>
+                    <p>Barcha Apple mahsulotlari rasmiy zavod kafolati bilan taqdim etiladi.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fa-solid fa-truck-fast"></i>
+                    <h3>Tezkor Yetkazish</h3>
+                    <p>Andijon shahar bo'ylab 2 soat ichida bepul yetkazib beramiz.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fa-solid fa-credit-card"></i>
+                    <h3>Qulay To'lov</h3>
+                    <p>Naqd, Plastik karta, Click/Payme hamda 3-12 oylik muddatli to'lov.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fa-solid fa-headset"></i>
+                    <h3>Professional Xizmat</h3>
+                    <p>Mutaxassislarimiz qurilmani sozlash va Apple ID ochishda yordam beradi.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Catalog Section -->
+    <section class="catalog-section" id="catalog">
+        <div class="container">
+            <div class="section-header">
+                <h2>Apple Qurilmalari Katalogi</h2>
+                <p>iPhone 13 dan eng so'nggi flagmanlargacha — eng yaxshi narxlarda</p>
+            </div>
+
+            <!-- Controls: Filters & Sorting -->
+            <div class="catalog-controls">
+                <div class="filter-pills" id="category-filters">
+                    <button class="filter-pill active" data-filter="all">Barchasi</button>
+                    <button class="filter-pill" data-filter="iPhone">iPhone</button>
+                    <button class="filter-pill" data-filter="MacBook">MacBook</button>
+                    <button class="filter-pill" data-filter="iPad">iPad</button>
+                    <button class="filter-pill" data-filter="Watch">Apple Watch</button>
+                    <button class="filter-pill" data-filter="AirPods">AirPods</button>
+                </div>
+
+                <div class="sort-wrapper">
+                    <label for="sort-select">Saralash:</label>
+                    <select id="sort-select">
+                        <option value="popular">Eng ommabop</option>
+                        <option value="price-low">Arzonroq</option>
+                        <option value="price-high">Qimmatroq</option>
+                        <option value="newest">Yangi modellar</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Product Grid -->
+            <div class="product-grid" id="product-grid">
+                <!-- Rendered dynamically by script.js -->
+            </div>
+        </div>
+    </section>
+
+    <!-- About Store Section -->
+    <section class="about-section" id="about">
+        <div class="container about-grid">
+            <div class="about-text">
+                <span class="section-tag">Biz Haqimizda</span>
+                <h2>Apple Store Andijan — Shahrimizdagi raqamli texnologiyalar markazi</h2>
+                <p>Biz mijozlarimizga jahon standartlariga mos keluvchi haqiqiy Apple qurilmalarini eng qulay shartlarda taqdim etamiz. Andijon shahar markazidagi do'konimizda barcha turdagi iPhone, MacBook, iPad va aksessuarlarni jonli ko'rib, sinab ko'rishingiz mumkin.</p>
+                <div class="about-stats">
+                    <div class="stat-item">
+                        <h3>5+</h3>
+                        <p>Yillik tajriba</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>15,000+</h3>
+                        <p>Mamnun mijozlar</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>1 yil</h3>
+                        <p>Rasmiy kafolat</p>
+                    </div>
+                </div>
+            </div>
+            <div class="about-image">
+                <img src="https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/store-card-40-ipad-air-202405?wid=800&hei=1000&fmt=p-jpg&qlt=95&.v=1714416871032" alt="Apple Store Interior">
+            </div>
+        </div>
+    </section>
+
+    <!-- Store Location & Contact Section -->
+    <section class="location-section" id="location">
+        <div class="container">
+            <div class="section-header">
+                <h2>Bizni Andijon shahar markazida toping</h2>
+                <p>Do'konimizga tashrif buyuring yoki biz bilan bog'laning</p>
+            </div>
+            
+            <div class="location-grid">
+                <div class="location-info-card">
+                    <div class="info-item">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <div>
+                            <h4>Manzil</h4>
+                            <p>Andijon shahar, Boburshoh ko'chasi (Markaziy univermag yaqinida)</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fa-solid fa-clock"></i>
+                        <div>
+                            <h4>Ish vaqti</h4>
+                            <p>Har kuni: 09:00 — 21:00 (Dam olish kunisiz)</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fa-solid fa-phone"></i>
+                        <div>
+                            <h4>Telefon raqam</h4>
+                            <p>+998 (74) 223-00-00<br>+998 (99) 999-99-99</p>
+                        </div>
+                    </div>
+                    <a href="https://maps.google.com/?q=Andijan" target="_blank" class="btn-primary map-link-btn">
+                        <i class="fa-solid fa-map-location-dot"></i> Google Xaritada ochish
+                    </a>
+                </div>
+
+                <div class="contact-form-card">
+                    <h3>Bizga xabar yuboring</h3>
+                    <form id="contact-form">
+                        <div class="form-group">
+                            <input type="text" id="contact-name" required placeholder="Ismingiz">
+                        </div>
+                        <div class="form-group">
+                            <input type="tel" id="contact-phone" required placeholder="Telefon raqamingiz">
+                        </div>
+                        <div class="form-group">
+                            <textarea id="contact-message" rows="4" required placeholder="Savol yoki taklifingiz..."></textarea>
+                        </div>
+                        <button type="submit" class="btn-primary full-width">Xabarni yuborish</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Ko'p beriladigan savollar</h2>
+            </div>
+            <div class="faq-accordion" id="faq-accordion">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Mahsulotlar 100% originalmi?</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Ha, barcha mahsulotlarimiz to'g'ridan-to'g'ri Apple zavodlaridan keltirilgan bo'lib, IMEI ro'yxatidan o'tgan va rasmiy 1 yillik kafolatga ega.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Andijon bo'ylab yetkazib berish pullikmi?</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Andijon shahar markazi va unga yaqin hududlarga yetkazib berish xizmati mutlaqo bepul. Viloyat tumanlariga esa kelishilgan holda tezkor pochta orqali yuboriladi.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Muddatli to'lov (nasya)ga olsa bo'ladimi?</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Albatta! Hamkor banklarimiz va Uzum Nasiya orqali boshlang'ich to'lovsiz 3 oydan 12 oygacha muddatli to'lov asosida xarid qilishingiz mumkin.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Eski iPhone'ni yangisiga almashtirish (Trade-in) bormi?</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Ha, Trade-in dasturimiz orqali eski iPhone qurilmangizni baholatib, ustki qismini to'lagan holda eng so'nggi modelga almashtirishingiz mumkin.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-logo">
+                        <i class="fa-brands fa-apple"></i>
+                        <span>Apple Store Andijan</span>
+                    </div>
+                    <p>Andijon shahrida eng sara va original Apple texnologiyalari rasmiy markazi.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Telegram"><i class="fa-brands fa-telegram"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Tezkor havolalar</h4>
+                    <ul>
+                        <li><a href="#bosh-sahifa">Bosh sahifa</a></li>
+                        <li><a href="#catalog">iPhone Katalogi</a></li>
+                        <li><a href="#about">Biz haqimizda</a></li>
+                        <li><a href="#location">Manzil & Aloqa</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Mahsulotlar</h4>
+                    <ul>
+                        <li><a href="#catalog">iPhone 17 Pro Max</a></li>
+                        <li><a href="#catalog">iPhone 16 Pro</a></li>
+                        <li><a href="#catalog">MacBook Pro M3</a></li>
+                        <li><a href="#catalog">Apple Watch Series 10</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Yangiliklarga obuna</h4>
+                    <p>Chegirmalar va yangi modellar haqida birinchilardan xabardor bo'ling.</p>
+                    <form class="newsletter-form" id="newsletter-form">
+                        <input type="email" required placeholder="E-pochta manzili">
+                        <button type="submit"><i class="fa-solid fa-paper-plane"></i></button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Apple Store Andijan. Barcha huquqlar himoyalangan.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Link -->
+    <script src="app.js"></script>
+</body>
+</html>
+
